@@ -1,0 +1,27 @@
+pcurtis@defiant:~/git-documents$ git reset HEAD~2
+pcurtis@defiant:~/git-documents$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	cheatsheet.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+pcurtis@defiant:~/git-documents$ git add cheatsheet.txt
+pcurtis@defiant:~/git-documents$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	new file:   cheatsheet.txt
+
+pcurtis@defiant:~/git-documents$ git commit -a -m "Added new file cheatsheet.txt"
+[master 9f7df6f] Added new file cheatsheet.txt
+ 1 file changed, 89 insertions(+)
+ create mode 100644 cheatsheet.txt
+pcurtis@defiant:~/git-documents$ git checkout -b CS-dev
+Switched to a new branch 'CS-dev'
+pcurtis@defiant:~/git-documents$ 
+
