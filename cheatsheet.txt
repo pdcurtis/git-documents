@@ -17,6 +17,7 @@ git add <files>     # Add to staging area, starts tracking if new file
 git add .           # Add all files to staging area and starts tracking of new files. 
 
 git rm <file>       # Removes from staging area and Deletes from Working Directory.
+                    # Rename file
 
 git commit -a -m "Message"  # 'One line' commit
 git commit --amend          # Chance to change last commit message
@@ -33,45 +34,47 @@ git config --global push.default simple
 git config --list           # Check current options - do from home to get only global options
 
 git push origin             # Assumes everything set - automatic set up if you cloned. Does not push branches or tags
-git push --tags             # Push all your tags
+git push --tags               # Push all your tags
 
-git log                     # List version history for current branch -Exit with Q.
-git log --pretty=oneline    # Pretty one line format but less info on each commit
-git log --follow <filename> # Show only commits for filename - useful
+git log                       # List version history for current branch -Exit with Q.
+git log --pretty=oneline      # Pretty one line format but less info on each commit
+git log --follow <filename>   # Show only commits for filename - very useful to watch evolution
 
-git tag <tagname> <ID>      # Add tag at ID
-git tag                     # List existing tags
-git push --tags             # Not automatic with straight push
+git tag <tagname> <ID>        # Add tag at ID
+git tag                       # List existing tags
+git push --tags               # Not automatic with straight push
 
-git branch <branchname>
+git branch <branchname>       # Create new branch at current HEAD position
 
-git branch                  # List all branches
-git branch --merged         # List only merged branches
-git branch --no-merged      # List only unmerged branches
+git branch                    # List all branches
+git branch --merged           # List only merged branches
+git branch --no-merged        # List only unmerged branches
+git branch -m oldname newname # Rename a branch
+git branch -d name            # Delete branch with
+git branch -D name            # Very Dangerous - loses unmerged files - stash first??
 
-git branch -d <>
-git branch -D <>            # Very Dangerous - loses unmerged files - stash first??
+git chechout <ID>             # Move HEAD to <ID> - repopulates Working Area from commit (snapshot)
+git chechout -b <branch>      # Create a new branch at current HEAD and checkout the new branch
 
-git chechout <ID>           # Move HEAD to <ID> - repopulates Working Area from commit (snapshot)
-git chechout -b <branch>    # Switch to <branch> and checkout
-
-git merge <branch>
-   git merge --abort
-   git mergetool -t meld
+git merge <branch>            # Merge branch into current branch
+   git merge --abort          # Abort Merge if too many conflicts to sort out quickly
+   git mergetool -t meld      # Use external merge tool (meld) to resolve conflicts
 
 git stash                  # Saves your working directory and staging area to a safe place and  restores your working directory and staging area to the most recent commit. Now you can safely change branch without losing anything.
    git stash pop           # Restores stashed changes to the working area (from last pop???)
    git stash list          # You can have several stashes and this lists them
 
-git diff <ID1> <ID2>
-git difftool <ID1> <ID2>  # calls meld when git config --global merge.tool meld
+git diff <ID1> <ID2>             # Shows differences
+git difftool -t meld <ID1> <ID2> # Calls meld to display differences
+git difftool <ID1> <ID2>         # calls meld when git config --global merge.tool meld
 
-git diff --no-color <ID> > temp.patch
-git format-patch <ID>
+git diff --no-color <ID> <ID2> > temp.patch # Puts diff output into a file suitable for patching ie without coloring information.
+git format-patch <ID1> <ID>2      # Create series of numbered patch files in the working directory each with full commit information suitible for email and application by git am < patchfile.patch
+git am < patchfile.patch         # Apply patch created by git format-patch
 
-git commit -a <Files>
+git commit -a <Files>       # Commit opening external editor for entering multiline commit message. Editor specified as leafpad by git config --global core.editor leafpad
 
-git remote add upstream https://github.com/linuxmint/Cinnamon.git  # Setting up  remote called upstream to access the repository you forked but could be any name and repository
+git remote add upstream https://github.com/linuxmint/Cinnamon.git  # Setting up  remote called upstream to access the repository you forked but could be any name and repository. Note upstream is in effect just a convenient alias (short handle) for https://github.com/linuxmint/Cinnamon.git
 
 git fetch upstream         # Collects a local copy of latest remote upstream
 git merge upstream/master  # Merges master of upstream into current branch

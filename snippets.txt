@@ -33,4 +33,38 @@ git branch -m old_branch new_branch         # Rename branch locally
 git push origin :old_branch                 # Delete the old branch    
 git push --set-upstream origin new_branch   # Push the new branch, set local branch to track the new remote
 
+###############################
+
+See what effects will be of a merge from remote
 =================================
+
+git checkout master
+git remote show
+git fetch upstream master
+git diff HEAD FETCH_HEAD
+git difftool HEAD FETCH_HEAD
+git difftool HEAD FETCH_HEAD <filename>
+
+
+git merge origin/master
+
+############################################
+How to get back to a situation where origin is the same as upstream for forked situation after some sort of disaster.
+############################################
+
+# use gitk to find a tag way back before the probems or the intial commit
+git reset --hard <very_early_tag>
+# force delete all of your branches other tham master. May be OK to leave if you need it again
+git branch -D <branch1>
+git branch -D <branch2>
+git fetch upstream master
+git merge upstream/master # Your local repository now should be the same as the remote repository you forked
+# now force a push  to origin which get your fork to the same as your local repository 
+git push --force 
+
+########################
+
+http://stackoverflow.com/questions/161813/how-to-resolve-merge-conflicts-in-git?rq=1
+
+###########################
+
