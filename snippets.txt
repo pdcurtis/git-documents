@@ -1,70 +1,278 @@
+Tips and Tricks
+###############
 
+#######################################
 Rename a local and remote branch in git
+#######################################
 
-==========================================
-
-If you have named a branch incorrectly AND pushed this to the remote repository follow these steps before any other developers get a chance to jump on you and give you shit for not correctly following naming conventions.
+If you have named a branch incorrectly AND pushed this to the remote repository follow these steps before any other developers get a chance to jump on you and give you s*** for not correctly following naming conventions.
 
 1. Rename your local branch.
-If you are on the branch you want to rename:
-1
-	
-git branch -m new-name
 
-If you are on a different branch:
-1
-	
-git branch -m old-name new-name
+  If you are on the branch you want to rename:
+    git branch -m new-name
+  If you are on a different branch:
+     git branch -m old-name new-name
 
 2. Delete the old-name remote branch and push the new-name local branch.
-1
-	
-git push origin :old-name new-name
+     git push origin :old-name new-name
 
 3. Reset the upstream branch for the new-name local branch.
-Switch to the branch and then:
-1
-	
-git push origin -u new-name
+   Switch to the branch and then:
+      git push origin -u new-name
 
-======================
+########### Or #################
 
 git branch -m old_branch new_branch         # Rename branch locally    
 git push origin :old_branch                 # Delete the old branch    
 git push --set-upstream origin new_branch   # Push the new branch, set local branch to track the new remote
 
-###############################
-
+###############################################
 See what effects will be of a merge from remote
-=================================
+###############################################
 
 git checkout master
 git remote show
 git fetch upstream master
 git diff HEAD FETCH_HEAD
+# or
 git difftool HEAD FETCH_HEAD
+# or for one specified file
 git difftool HEAD FETCH_HEAD <filename>
-
-
+# then one can
 git merge origin/master
 
-############################################
-How to get back to a situation where origin is the same as upstream for forked situation after some sort of disaster.
-############################################
+######################################################
+How to restore origin to the same as upstream for fork
+######################################################
 
 # use gitk to find a tag way back before the probems or the intial commit
 git reset --hard <very_early_tag>
-# force delete all of your branches other tham master. May be OK to leave if you need it again
+# force delete all of your branches other tham master. May be OK to leave if you need them again
 git branch -D <branch1>
 git branch -D <branch2>
 git fetch upstream master
 git merge upstream/master # Your local repository now should be the same as the remote repository you forked
-# now force a push  to origin which get your fork to the same as your local repository 
-git push --force 
+# now _force_ a push  to origin which get your fork to the same as your local repository 
+git push --force upstream/master
 
-########################
+########################################################
+Good exposition on how to resolve merge conflicts in git
+########################################################
 
 http://stackoverflow.com/questions/161813/how-to-resolve-merge-conflicts-in-git?rq=1
 
-###########################
+#################################
+Thoughts on remotes - conventions
+#################################
+
+One has various conventional names for remotes which are often set up automatically when one forks and clones. There is no mystery they are just aliases for the address of the remote repository. You can see this by
+
+pcurtis@defiant:~/Cinnamon$ git remote --verbose
+origin	https://github.com/pdcurtis/Cinnamon.git (fetch)
+origin	https://github.com/pdcurtis/Cinnamon.git (push)
+upstream	https://github.com/linuxmint/Cinnamon.git (fetch)
+upstream	https://github.com/linuxmint/Cinnamon.git (push)
+pcurtis@defiant:~/Cinnamon$ 
+
+It is convention to have origin as your own remote repository and upstream if your repository is fork of another repository which you need to keep up to date with but they could be called anything else. 
+
+Individual branches may be tracking or non tracking branches. By default one does not pull or push remote branches other than master unless set up specifically to track or fully specified in the pul, fetch or push commands. The output above shows which branches are the defaults for push, fetch and pull.
+
+So if we now look at our branches with various options
+
+pcurtis@defiant:~/Cinnamon$ git branch
+* master
+pcurtis@defiant:~/Cinnamon$ git branch -v
+* master 6b0ea0c Merge pull request #5608 from JosephMcc/window-list1
+pcurtis@defiant:~/Cinnamon$ git branch -vv
+* master 6b0ea0c [origin/master] Merge pull request #5608 from JosephMcc/window-list1
+pcurtis@defiant:~/Cinnamon$ 
+
+We can with the-vv option see what we are tracking as well where we are.
+
+Now lets have a look again as we set up a remote branch:
+
+pcurtis@defiant:~/git-documents$ git status
+On branch snippets-dev
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   snippets.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+pcurtis@defiant:~/git-documents$ git commit -a -m "More edits - FETCH_HEAD and Remotes"
+[snippets-dev 33920d7] More edits - FETCH_HEAD and Remotes
+ 1 file changed, 55 insertions(+), 32 deletions(-)
+pcurtis@defiant:~/git-documents$ git push origin snippets-dev
+Username for 'https://github.com': pdcurtis
+Password for 'https://pdcurtis@github.com': 
+Counting objects: 16, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (16/16), done.
+Writing objects: 100% (16/16), 5.57 KiB | 0 bytes/s, done.
+Total 16 (delta 7), reused 0 (delta 0)
+remote: Resolving deltas: 100% (7/7), done.
+To https://github.com/pdcurtis/git-documents.git
+ * [new branch]      snippets-dev -> snippets-dev
+pcurtis@defiant:~/git-documents$ git remote --verbose
+origin	https://github.com/pdcurtis/git-documents.git (fetch)
+origin	https://github.com/pdcurtis/git-documents.git (push)
+pdc	https://github.com/pdcurtis/cinnamon-applets (fetch)
+pdc	https://github.com/pdcurtis/cinnamon-applets (push)
+pcurtis@defiant:~/git-documents$ git branch -vv
+  cheatsheet-dev 9f7df6f Added new file cheatsheet.txt
+  examples-dev   aed55c0 Edited examples.txt
+  master         448e980 [origin/master: ahead 4] More edits to cheatsheet.txt and snippets.txt
+* snippets-dev   33920d7 More edits - FETCH_HEAD and Remotes
+pcurtis@defiant:~/git-documents$ git push --set-upstream origin snippets-dev
+Username for 'https://github.com': pdcurtis
+Password for 'https://pdcurtis@github.com': 
+Branch snippets-dev set up to track remote branch snippets-dev from origin.
+Everything up-to-date
+pcurtis@defiant:~/git-documents$ git branch -vv
+  cheatsheet-dev 9f7df6f Added new file cheatsheet.txt
+  examples-dev   aed55c0 Edited examples.txt
+  master         448e980 [origin/master: ahead 4] More edits to cheatsheet.txt and snippets.txt
+* snippets-dev   33920d7 [origin/snippets-dev] More edits - FETCH_HEAD and Remotes
+pcurtis@defiant:~/git-documents$ 
+
+############# Edits to snippets.txt ##################
+
+pcurtis@defiant:~/git-documents$ git commit -a -m "Show set up of remote tracking branch"
+[snippets-dev cccb93b] Show set up of remote tracking branch
+ 1 file changed, 47 insertions(+)
+pcurtis@defiant:~/git-documents$ git branch -vv
+  cheatsheet-dev 9f7df6f Added new file cheatsheet.txt
+  examples-dev   aed55c0 Edited examples.txt
+  master         448e980 [origin/master: ahead 4] More edits to cheatsheet.txt and snippets.txt
+* snippets-dev   cccb93b [origin/snippets-dev: ahead 1] Show set up of remote tracking branch
+pcurtis@defiant:~/git-documents$ 
+
+
+
+pcurtis@defiant:~/git-documents$ git config --list
+user.email=gitmail@pcurtis.com
+user.name=pdcurtis
+core.editor=leafpad
+diff.tool=meld
+merge.tool=meld
+color.ui=auto
+push.default=simple
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/pdcurtis/git-documents.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+remote.pdc.url=https://github.com/pdcurtis/cinnamon-applets
+remote.pdc.fetch=+refs/heads/*:refs/remotes/pdc/*
+branch.snippets-dev.remote=origin
+branch.snippets-dev.merge=refs/heads/snippets-dev
+pcurtis@defiant:~/git-documents$ 
+
+pcurtis@defiant:~/git-documents$ git push
+Username for 'https://github.com': pdcurtis
+Password for 'https://pdcurtis@github.com': 
+Counting objects: 3, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 1.11 KiB | 0 bytes/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/pdcurtis/git-documents.git
+   33920d7..cccb93b  snippets-dev -> snippets-dev
+pcurtis@defiant:~/git-documents$ git branch -vv
+  cheatsheet-dev 9f7df6f Added new file cheatsheet.txt
+  examples-dev   aed55c0 Edited examples.txt
+  master         448e980 [origin/master: ahead 4] More edits to cheatsheet.txt and snippets.txt
+* snippets-dev   cccb93b [origin/snippets-dev] Show set up of remote tracking branch
+
+pcurtis@defiant:~/git-documents$ git remote show
+origin
+pdc
+pcurtis@defiant:~/git-documents$ git remote remove pdc
+pcurtis@defiant:~/git-documents$ git remote show
+origin
+pcurtis@defiant:~/git-documents$ git remote -v
+origin	https://github.com/pdcurtis/git-documents.git (fetch)
+origin	https://github.com/pdcurtis/git-documents.git (push)
+pcurtis@defiant:~/git-documents$ git branch -vv
+  cheatsheet-dev 9f7df6f Added new file cheatsheet.txt
+  examples-dev   aed55c0 Edited examples.txt
+  master         448e980 [origin/master: ahead 4] More edits to cheatsheet.txt and snippets.txt
+* snippets-dev   cccb93b [origin/snippets-dev] Show set up of remote tracking branch
+pcurtis@defiant:~/git-documents$ git config --list
+user.email=gitmail@pcurtis.com
+user.name=pdcurtis
+core.editor=leafpad
+diff.tool=meld
+merge.tool=meld
+color.ui=auto
+push.default=simple
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/pdcurtis/git-documents.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+branch.snippets-dev.remote=origin
+branch.snippets-dev.merge=refs/heads/snippets-dev
+pcurtis@defiant:~/git-documents$ 
+
+##########################
+Set up on extra machine including remote branches
+##########################
+
+pcurtis@matrix:~$ git clone https://github.com/pdcurtis/git-documents
+Cloning into 'git-documents'...
+remote: Counting objects: 27, done.
+remote: Compressing objects: 100% (6/6), done.
+remote: Total 27 (delta 2), reused 0 (delta 0), pack-reused 21
+Unpacking objects: 100% (27/27), done.
+Checking connectivity... done.
+
+pcurtis@matrix:~$ cd git-documents
+pcurtis@matrix:~/git-documents$ git branch -vv
+* master c7a06db [origin/master] first commit
+pcurtis@matrix:~/git-documents$ git remote --verbose
+origin	https://github.com/pdcurtis/git-documents (fetch)
+origin	https://github.com/pdcurtis/git-documents (push)
+
+pcurtis@matrix:~/git-documents$ git fetch origin snippets-dev
+From https://github.com/pdcurtis/git-documents
+ * branch            snippets-dev -> FETCH_HEAD
+pcurtis@matrix:~/git-documents$ git checkout FETCH_HEAD
+Note: checking out 'FETCH_HEAD'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at c251cad... More terminal output of Remote operations and branch displays
+pcurtis@matrix:~/git-documents$ git checkout master
+pcurtis@matrix:~/git-documents$ git checkout --track origin/snippets-dev
+Branch snippets-dev set up to track remote branch snippets-dev from origin.
+Switched to a new branch 'snippets-dev'
+pcurtis@matrix:~/git-documents$ git branch -vv
+  master       c7a06db [origin/master] first commit
+* snippets-dev c251cad [origin/snippets-dev] More terminal output of Remote operations and branch displays
+pcurtis@matrix:~/git-documents$ git branch -a -vv
+  master                      c7a06db [origin/master] first commit
+* snippets-dev                c251cad [origin/snippets-dev] More terminal output of Remote operations and branch displays
+  remotes/origin/HEAD         -> origin/master
+  remotes/origin/master       c7a06db first commit
+  remotes/origin/snippets-dev c251cad More terminal output of Remote operations and branch displays
+
+
 
