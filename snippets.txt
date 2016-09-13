@@ -275,6 +275,7 @@ pcurtis@matrix:~/git-documents$ git branch -a -vv
   remotes/origin/snippets-dev c251cad More terminal output of Remote operations and branch displays
 
 
+
 pcurtis@defiant:~/git-documents$ git branch -a -vv
   cheatsheet-dev              9f7df6f Added new file cheatsheet.txt
   examples-dev                aed55c0 Edited examples.txt
@@ -298,5 +299,7 @@ pcurtis@defiant:~/git-documents$ git branch -a -vv
   remotes/origin/master         448e980 More edits to cheatsheet.txt and snippets.txt
   remotes/origin/snippets-dev   4af458b Combined Edits to snippets.txt
 pcurtis@defiant:~/git-documents$ 
+
+
 
 
