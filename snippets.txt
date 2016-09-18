@@ -300,6 +300,68 @@ pcurtis@defiant:~/git-documents$ git branch -a -vv
   remotes/origin/snippets-dev   4af458b Combined Edits to snippets.txt
 pcurtis@defiant:~/git-documents$ 
 
+#############################
+Change a local and remote tag
+#############################
 
-
+pcurtis@defiant:~/cinnamon-applets$ git tag
+BAMS-1.1.5
+BAMS-1.1.9
+BAMS-v30_1.1.8
+Bumblebee-0.9.5
+Bumblebee-0.9.7
+Bumblebee-0.9.8
+Bumblebee-3.0.0
+Bumblebee-3.0.4
+NUMA-2.3.17
+NUMA-2.3.7
+NUMA-2.4.2
+NUMA-2.6.0
+NUMA-3.0.0
+NUMA-3.0.3
+NUMA-3.0.5
+NUMA-3.06
+Stopwatch-1.2.2
+Stopwatch-1.2.3
+Stopwatch-3.0.0
+nvidiaprime-3.0.2
+nvidiaprime-3.1.4
+pcurtis@defiant:~/cinnamon-applets$ git tag BAMS-1.1.8 BAMS-v30_1.1.8
+pcurtis@defiant:~/cinnamon-applets$ git tag -d BAMS-v30_1.1.8
+Deleted tag 'BAMS-v30_1.1.8' (was cac07f7)
+pcurtis@defiant:~/cinnamon-applets$ git tag
+BAMS-1.1.5
+BAMS-1.1.8
+BAMS-1.1.9
+Bumblebee-0.9.5
+Bumblebee-0.9.7
+Bumblebee-0.9.8
+Bumblebee-3.0.0
+Bumblebee-3.0.4
+NUMA-2.3.17
+NUMA-2.3.7
+NUMA-2.4.2
+NUMA-2.6.0
+NUMA-3.0.0
+NUMA-3.0.3
+NUMA-3.0.5
+NUMA-3.06
+Stopwatch-1.2.2
+Stopwatch-1.2.3
+Stopwatch-3.0.0
+nvidiaprime-3.0.2
+nvidiaprime-3.1.4
+pcurtis@defiant:~/cinnamon-applets$ git remote -v
+origin	https://github.com/pdcurtis/cinnamon-applets (fetch)
+origin	https://github.com/pdcurtis/cinnamon-applets (push)
+pcurtis@defiant:~/cinnamon-applets$ git push origin :BAMS-v30_1.1.8
+Username for 'https://github.com': pdcurtis
+Password for 'https://pdcurtis@github.com': 
+To https://github.com/pdcurtis/cinnamon-applets
+ - [deleted]         BAMS-v30_1.1.8
+pcurtis@defiant:~/cinnamon-applets$ git push origin --tags
+Total 0 (delta 0), reused 0 (delta 0)
+To https://github.com/pdcurtis/cinnamon-applets
+ * [new tag]         BAMS-1.1.8 -> BAMS-1.1.8
+pcurtis@defiant:~/cinnamon-applets$
 
