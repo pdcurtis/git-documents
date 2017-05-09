@@ -33,12 +33,14 @@ git config --global push.default simple
 
 git config --list           # Check current options - do from home to get only global options
 
-git push origin             # Assumes everything set - automatic set up if you cloned. Does not push branches or tags
-git push --tags               # Push all your tags
+git push origin                # Assumes everything set - automatic set up if you cloned. Does not push branches or tags 
+git push --tags                # Push all your tags
+git push origin topic-branch   # Push your branch
+git push origin -f topic-branch# Force your push so it overwrites previous topic-branch
 
-git log                       # List version history for current branch -Exit with Q.
-git log --pretty=oneline      # Pretty one line format but less info on each commit
-git log --follow <filename>   # Show only commits for filename - very useful to watch evolution
+git log                         # List version history for current branch -Exit with Q.
+git log --pretty=oneline        # Pretty one line format but less info on each commit
+git log --follow <filename>     # Show only commits for filename - very useful to watch evolution
 
 git tag <tagname> <ID>        # Add tag at ID
 git tag                       # List existing tags
@@ -82,6 +84,9 @@ git merge upstream/master  # Merges master of upstream into current branch
 git pull https://github.com/autarkper/Cinnamon alttab-multi-ws # One-off pull from a different repository to merge in a development branch (pull requested)
 
 git reset --hard HEAD~4  # Completely destroy all trace of the last 4 commits. 
+
+git rebase master        # Brings a branch up to date with changes in your master often after a fetch and merge from upstream
+git rebase -i HEAD~4     # The way to squash commits and change messages before a PR. Interactive.
 
 ### Carets and Tildas ###
 
